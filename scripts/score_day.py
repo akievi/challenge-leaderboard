@@ -47,7 +47,11 @@ def fetch_ground_truth(target_date: str) -> pd.Series:
         raise RuntimeError("ENTSOE_API_KEY ist nicht gesetzt")
 
     start = datetime.fromisoformat(f"{target_date}T00:00:00").replace(tzinfo=timezone.utc)
-    end = start + timedelta(hours=23)
+    # Mit Puffer vor + nach dem Zieltag laden, damit (i) die letzten
+    # 15-Min-Werte für die 23:00-Stunde komplett sind und (ii) ein
+    # eventueller Quartal-Ausreißer am Tagesrand nicht den ganzen Tag NaN macht.
+    fetch_start = start - timedelta(hours=6)
+    fetch_end = start + timedelta(hours=29)  # 24h Zieltag + 5h Puffer
 
     with tempfile.TemporaryDirectory() as tmp:
         data_home = Path(tmp) / "spotforecast2_data"
@@ -60,8 +64,8 @@ def fetch_ground_truth(target_date: str) -> pd.Series:
         download_new_data(
             api_key=api_key,
             country_code=COUNTRY,
-            start=start.strftime("%Y%m%d%H%M"),
-            end=end.strftime("%Y%m%d%H%M"),
+            start=fetch_start.strftime("%Y%m%d%H%M"),
+            end=fetch_end.strftime("%Y%m%d%H%M"),
             force=True,
         )
 
