@@ -76,6 +76,20 @@ teams:
     model_card_link: "https://github.com/sequential-parameter-optimization/spotforecast2-safe/blob/main/MODEL_CARD.md"
     group: "--"
     certified: "No"
+  - id: team_4_zones
+    display_name: "Team 4 Zones SpotOptim"
+    github_handles: [bartzbeielstein]
+    model_card_link: "https://github.com/sequential-parameter-optimization/spotforecast2-safe/blob/main/MODEL_CARD.md"
+    software_link: "https://github.com/bartzbeielstein/challenge-leaderboard/releases/download/repro-team4-2026-06-08/team4-repro-2026-06-08.zip"
+    group: "--"
+    certified: "No"
+    openssf: "https://scorecard.dev/viewer/?uri=github.com/sequential-parameter-optimization/spotforecast2-safe"
+  - id: team_4_entsoe_zones
+    display_name: "Team 4 Zones SpotOptim (ENTSO-E)"
+    github_handles: [bartzbeielstein]
+    model_card_link: "https://github.com/sequential-parameter-optimization/spotforecast2-safe/blob/main/MODEL_CARD.md"
+    group: "--"
+    certified: "No"
   - id: team_4_optuna
     display_name: "Team 4 Optuna"
     github_handles: [bartzbeielstein]
