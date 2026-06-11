@@ -107,6 +107,12 @@ def test_validate_pr_is_not_pull_request_target():
     assert "pull_request_target" not in on
 
 
+def test_validate_pr_counts_only_new_submission_files():
+    body = (WF / "validate-pr.yml").read_text()
+    assert "--diff-filter=A" in body
+    assert "genau eine neue Submission hinzufügen" in body
+
+
 def test_ci_workflow_runs_pytest_and_actionlint():
     # The test suite + workflow lint must actually run in CI on every PR.
     body = (WF / "ci.yml").read_text()
