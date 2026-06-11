@@ -79,6 +79,11 @@ teams:
     certified: "No"
     openssf: "https://scorecard.dev/viewer/?uri=github.com/sequential-parameter-optimization/spotforecast2-safe"
     retired: true   # ab 2026-06-10 ersetzt durch team_4_4zones
+  - id: chronos
+    display_name: "chronos"
+    github_handles: [bartzbeielstein]
+    group: "--"
+    certified: "No"
   - id: team_4_ch14
     display_name: "Team 4 SpotOptim (Ch 14)"
     github_handles: [bartzbeielstein]
