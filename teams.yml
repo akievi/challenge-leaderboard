@@ -53,13 +53,17 @@ teams:
   - id: syntaxerror
     display_name: "Syntaxerror"
     github_handles: [lriethk, timhaeger,linus-thk]
-    group: "ING" 
-    certified: "No" 
+    group: "ING"
+    certified: "No"
+    model_card_link: "https://github.com/linus-thk/syntaxerror-prognose/blob/main/MODEL_CARD.md"
+    software_link: "https://github.com/linus-thk/syntaxerror-prognose/archive/refs/heads/main.zip"
   - id: syntaxerror_entsoe
     display_name: "Syntaxerror (ENTSO-E)"
     github_handles: [lriethk, timhaeger,linus-thk]
     group: "ING"
-    certified: "No" 
+    certified: "No"
+    model_card_link: "https://github.com/linus-thk/syntaxerror-prognose/blob/main/MODEL_CARD.md"
+    software_link: "https://github.com/linus-thk/syntaxerror-prognose/archive/refs/heads/main.zip" 
   - id: team_fabinalii
     display_name: "Team Fabinalii"
     github_handles: [akievi, ffeith-thk, VitaliiZakharuk]
