@@ -12,7 +12,7 @@
 | Sprache | Python 3.13 |
 | Lizenz | MIT |
 | Repository | https://github.com/bartzbeielstein/challenge-leaderboard (Submissions unter `submissions/team_fabinalii/`) |
-| Technischer Bericht | Dieses Dokument + [DEVLOG.md](../../DEVLOG.md) |
+| Technischer Bericht | Dieses Dokument + [DEVLOG.md](DEVLOG.md) |
 
 **Abhängigkeiten (Kern):**
 
@@ -212,7 +212,7 @@ MAEs weichen vom Live-Leaderboard ab, das Wetter-Forecast nutzt):
 (2026-06-20: MAE 7.371). Ursache: kurze Lags schleppten das Freitags-
 Momentum in den Samstag. Durch Hybrid-Lags behoben — Samstage liegen jetzt
 auf dem Niveau der besten Teams. Details + Validierung in
-[DEVLOG.md](../../DEVLOG.md).
+[DEVLOG.md](DEVLOG.md).
 
 ---
 
@@ -221,7 +221,7 @@ auf dem Niveau der besten Teams. Details + Validierung in
 - **Unsicherheit:** keine Intervalle; reine Punktprognose. Konfidenz nur
   indirekt über historische MAE-Streuung.
 - **Auditierbarkeit:** vollständiger Code in
-  [`12_challenge.ipynb`](../../12_challenge.ipynb) cell-4; jede Submission
+  `lecture/12_challenge.ipynb` (Kursrepo) cell-4; jede Submission
   hinterlegt Snapshot + Parameter-Log → exakt nachvollziehbar.
 - **Feature-Attribution:** LightGBM-Feature-Importances zugänglich über
   den gekapselten Regressor (nicht standardmäßig exportiert).
