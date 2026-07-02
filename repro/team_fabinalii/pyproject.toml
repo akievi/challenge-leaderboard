@@ -1,0 +1,35 @@
+[project]
+name = "team-fabinalii-repro"
+version = "2.0.0"
+description = "Reproducibility package for Team Fabinalii's 24h DE load forecast (Lastprognose-Challenge SoSe26)"
+requires-python = "==3.13.*"
+license = { text = "MIT" }
+authors = [
+    { name = "Inalbek Akiev",   email = "inalbek.akiev@smail.th-koeln.de" },
+    { name = "Fabian Feith",    email = "fabian.feith@smail.th-koeln.de" },
+    { name = "Vitalii Zakharuk", email = "vitalii.zakharuk@smail.th-koeln.de" },
+]
+
+# Kern-Abhängigkeiten (==-gepinnt). Vollständige Auflösung in requirements.txt
+# (pip freeze der Original-Umgebung). spotforecast2-safe bringt die Pipeline-
+# Bausteine (ForecasterRecursive, ExogBuilder, LinearlyInterpolateTS,
+# WeatherService, ENTSO-E-Downloader).
+dependencies = [
+    "spotforecast2-safe==3.0.0",
+    "lightgbm==4.6.0",
+    "pandas==3.0.2",
+    "numpy==2.2.0",
+    "scikit-learn==1.8.0",
+    "entsoe-py==0.8.0",
+    "pyarrow==24.0.0",
+]
+
+[project.scripts]
+team-fabinalii-submit = "team_fabinalii_submit:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["team_fabinalii_submit.py"]
