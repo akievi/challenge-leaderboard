@@ -1,3 +1,60 @@
+# Team Fabinalii: day-ahead load forecast for Germany
+
+This is a fork of [bartzbeielstein/challenge-leaderboard](https://github.com/bartzbeielstein/challenge-leaderboard), the scoring system of a live forecasting challenge in the course *Sicherheitskritische Zeitreihenprognose mit spotforecast2-safe* (Numerische Mathematik / DDMO, summer term 2026, TH Köln, Prof. Bartz-Beielstein). The fork holds the entry of **Team Fabinalii**: [@akievi](https://github.com/akievi), [@ffeith-thk](https://github.com/ffeith-thk) and [@VitaliiZakharuk](https://github.com/VitaliiZakharuk).
+
+The scoring code, the workflows and all other teams' submissions come from the upstream repository. The original README is kept unchanged [further down](#original-readme-of-the-upstream-repository). Everything specific to our team lives in two folders:
+
+| Path | Content |
+|---|---|
+| [`submissions/team_fabinalii/`](submissions/team_fabinalii) | the daily forecasts, the [model card](submissions/team_fabinalii/MODEL_CARD.md), the [development log](submissions/team_fabinalii/DEVLOG.md) and the license (MIT) |
+| [`repro/team_fabinalii/`](repro/team_fabinalii) | a self-contained package that reruns one forecast offline and compares it with a stored reference |
+
+## The task
+
+Every day, each team submits a forecast of the German hourly electricity load for the next day: 24 values in MW, one CSV per target day, handed in as a pull request before the deadline. The next day the forecast is scored against the actual load published by the ENTSO-E Transparency Platform. The ranking uses the mean absolute error (MAE) over all scored days. The official ENTSO-E day-ahead forecast and two seasonal-naive baselines run alongside as reference entries.
+
+## Our model
+
+- **Forecaster:** a recursive multi-step forecaster from [`spotforecast2-safe`](https://github.com/sequential-parameter-optimization/spotforecast2-safe) around a LightGBM regressor (400 trees, learning rate 0.05, 63 leaves, fixed seed, deterministic mode).
+- **Lags depend on the weekday of the target day.** Tuesday to Friday use the lags 1, 2, 3, 24 and 168 hours. Monday, Saturday and Sunday use only whole days (24, 48, ... 168 hours).
+- **Training data:** the last 730 days of ENTSO-E load, refit for every submission, ending just before the target day so that nothing leaks.
+- **Features:** hour, day of week and month, plus weather from Open-Meteo (the weather forecast for submissions).
+- **Guard against bad data:** load values outside 20,000 to 100,000 MW are dropped and interpolated. This caught an ENTSO-E glitch of 1,124,884 MW.
+
+## What we learned
+
+The first version used the same lags on every day. On Saturday 20 June 2026 it was 7,371 MW off. The cause: for a Saturday, the 24-hour lag points to a Friday, and a Saturday's daily load is about 14 % lower than a Friday's. The recursive forecast carried the Friday shape into the weekend.
+
+Weekday dummies changed nothing, because the model already had the day of week. An extra 336-hour lag made the mean error worse. What worked was the weekday-dependent lag set together with the longer training window. In a backtest over 13 to 25 months with archived weather, the mean MAE went from about 2,050 MW to about 1,720 MW with the new lags and to about 1,465 MW with the 730-day window. Backtest values compare the variants with each other. They are lower than the live scores because the live runs use a weather forecast. The full reasoning, including the failed attempts, is in the [development log](submissions/team_fabinalii/DEVLOG.md).
+
+## Result
+
+Scored on 47 days from 4 June to 20 July 2026 (one of them carried forward from the previous submission), based on the public leaderboard data:
+
+| | Mean MAE |
+|---|---|
+| Team Fabinalii | 1,748 MW |
+| ENTSO-E day-ahead forecast, same 47 days | 2,153 MW |
+| Seasonal naive, 168 h, same 47 days | 2,445 MW |
+| Seasonal naive, 24 h, same 47 days | 4,067 MW |
+
+We beat the ENTSO-E forecast on 31 of the 47 days. The leaderboard data contains 25 entries, including the lecturer's reference models and the baselines. Team Fabinalii is 9th of them. In the last weeks, with the final model, we were in the middle of the field of student teams, behind the best teams. Our entry is not independently certified; the reproduction package is there so that someone can check it.
+
+## Reproduce a forecast
+
+```bash
+cd repro/team_fabinalii
+uv sync
+uv run python team_fabinalii_submit.py --snapshot --target-date 2026-06-27 --out out.csv
+diff out.csv expected/2026-06-27_reference.csv
+```
+
+This runs offline from a frozen snapshot of load and weather. Byte-identical output is only claimed for Windows on x86-64, the machine of the original runs. The [package README](repro/team_fabinalii/README.md) explains the live mode and the details.
+
+---
+
+## Original README of the upstream repository
+
 # challenge-leaderboard
 
 Automatisierte Bewertung der Live-Lastprognose-Challenge der Vorlesungen
